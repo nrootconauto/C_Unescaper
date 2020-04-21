@@ -63,6 +63,12 @@ char* unescapeString(uint8_t* str,uint8_t* where) {
 			str++;
 			continue;
 		}
+		if(*str=='\"') {
+			memcpy(where,"\\\"",2);
+			where+=2;
+			str++;
+			continue;
+		}
 		//\uHHHH
 		const uint8_t twoByteUTF8=0|0b11000000;
 		const uint8_t threeByteUTF8=0|0b11100000;
