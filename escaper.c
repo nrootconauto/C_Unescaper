@@ -129,7 +129,7 @@ char* unescapeString(uint8_t* str,uint8_t* where) {
 		}
 		//if cant be inputed with a (us) keyboard,escape
 		
-		const char* valids="~!@#$%^&*()_+|}{[]\\;':\",./<>?";
+		const char* valids=" ~!@#$%^&*()_+|}{[]\\;':\",./<>?";
 		bool isValid=false;
 		if(*str>='a'&&'z'>=*str)
 			isValid=true;
@@ -139,11 +139,14 @@ char* unescapeString(uint8_t* str,uint8_t* where) {
 			isValid=true;
 		else if(strchr(valids,*str)!=NULL)
 			isValid=true;
-		
 		if(!isValid) {
 			char temp[5];
-			sprintf(temp,"\\x%x%x",(str[0]>>4)&0xf,str[0]&0xf);
-			memcpy(where,temp,4);
+			sprintf(temp,"%o",str[0]);
+			int len=strlen(temp);
+			memmove(temp+3-len, temp, len);
+			memset(temp, '0', 3-len);
+			where[0]='\\';
+			memcpy(where+1,temp,4);
 			str++;
 			where+=4;
 			continue;
